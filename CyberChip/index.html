@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link href="/MaterialDesignIcons/materialdesignicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
+
+<style>
+  #app {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  #app::before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    z-index: -1;
+    background-image: url('../background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top, center;
+    background-attachment: fixed;
+    filter: opacity(80%);
+  }
+</style>
