@@ -145,20 +145,28 @@
                         <v-btn variant="outlined" @click="changeBankRoll" style="height: 30%;">
                             印钞 {{ tempBankRoll }}
                         </v-btn>
-                        <v-btn variant="outlined" @click="addSidePot" style="height: 30%;">
-                            边池 {{ tempSidePot }}
-                        </v-btn>
-                    </div>
-                    <div class="d-flex flex-column justify-space-between" style="width: 30%;">
                         <v-btn variant="outlined" @click="getRice" style="height: 30%;" color="success"
                             :disabled="cyberChip.pot <= 0">
                             收米(底) {{ cyberChip.pot }}
                         </v-btn>
-                        <v-btn variant="outlined" style="height: 30%;" :disabled="cyberChip.sidePotList.length <= 1">
+                    </div>
+                    <div class="d-flex flex-column justify-space-between" style="width: 30%;">
+                        <v-btn variant="outlined" style="height: 30%;">
                             选择边池
                             <v-menu activator="parent">
                                 <v-list>
+                                    <v-list-item @click="chosenSidePot = -1">
+                                        <template v-slot:prepend>
+                                            <v-icon icon="mdi-plus-circle-outline"></v-icon>
+                                        </template>
+                                        <v-list-item-title>
+                                            新边池
+                                        </v-list-item-title>
+                                    </v-list-item>
                                     <v-list-item v-for="sidePot, i in cyberChip.sidePotList" @click="chosenSidePot = i">
+                                        <template v-slot:prepend>
+                                            <v-icon icon="mdi-poker-chip"></v-icon>
+                                        </template>
                                         <v-list-item-title>
                                             边池 {{ i + 1 }}：{{ sidePot }}
                                         </v-list-item-title>
@@ -166,8 +174,16 @@
                                 </v-list>
                             </v-menu>
                         </v-btn>
+                        <v-btn variant="outlined" @click="addSidePot" style="height: 30%;">
+                            <div v-if="chosenSidePot === -1">
+                                新边池 +{{ tempSidePot }}
+                            </div>
+                            <div v-else>
+                                边池{{ chosenSidePot + 1 }} +{{ tempSidePot }}
+                            </div>
+                        </v-btn>
                         <v-btn variant="outlined" @click="getSideRice" style="height: 30%;" color="success"
-                            :disabled="cyberChip.sidePotList.length === 0">
+                            :disabled="cyberChip.sidePotList.length === 0 || chosenSidePot < 0">
                             收米(边{{ chosenSidePot + 1 }}) {{ cyberChip.sidePotList[chosenSidePot] }}
                         </v-btn>
                     </div>
@@ -311,7 +327,7 @@ export default {
             tempAnte: 0,
             tempBankRoll: 0,
             tempSidePot: 0,
-            chosenSidePot: 0,
+            chosenSidePot: -1,
             beforeUnload_time: 0,
             gap_time: 0,
             stopDialogVisible: false,
@@ -624,7 +640,7 @@ export default {
                         token: sessionStorage.getItem('token')
                     }
                 })
-                .post(this.baseURL + '/cyberchip/token/addSidePot', { 'tempSidePot': this.tempSidePot })
+                .post(this.baseURL + '/cyberchip/token/addSidePot', { 'sidePotIndex': this.chosenSidePot, 'tempSidePot': this.tempSidePot })
                 .then((result) => {
                     if (result.data.flag === true) {
                         this.snackbar.color = 'success'
@@ -633,6 +649,7 @@ export default {
                     }
                     this.snackbar.text = result.data.message
                     this.snackbar.show = true
+                    this.chosenSidePot = -1
                     this.toZero()
                 })
                 .catch((err) => {
@@ -685,7 +702,7 @@ export default {
                     }
                     this.snackbar.text = result.data.message
                     this.snackbar.show = true
-                    this.chosenSidePot = 0
+                    this.chosenSidePot = -1
                 })
                 .catch((err) => {
                     this.snackbar.color = 'error'

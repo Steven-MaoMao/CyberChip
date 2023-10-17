@@ -269,12 +269,16 @@ public class CyberChipController {
     public Result addSidePot(@RequestHeader("token") String token, @RequestBody Map<String, Integer> map) {
         try {
             CyberChip cyberChipRoom = redisGetCyberChip(JWT.parseToken(token).get("roomName").toString());
-            cyberChipRoom.getSidePotList().add(map.get("tempSidePot"));
+            if (map.get("sidePotIndex") == -1) {
+                cyberChipRoom.getSidePotList().add(map.get("tempSidePot"));
+            } else {
+                cyberChipRoom.getSidePotList().set(map.get("sidePotIndex"), cyberChipRoom.getSidePotList().get(map.get("sidePotIndex")) + map.get("tempSidePot"));
+            }
             cyberChipRoom.setPot(cyberChipRoom.getPot() - map.get("tempSidePot"));
             redisSetCyberChip(cyberChipRoom);
             Result result = new Result();
             result.setFlag(true);
-            result.setMessage("添加边池 边池" + cyberChipRoom.getSidePotList().size() + ":" + map.get("tempSidePot") + " 成功！");
+            result.setMessage("添加边池成功！");
             return result;
         } catch (Exception e) {
             return new Result();
