@@ -126,6 +126,17 @@ public class CyberChipController {
             String roomName = JWT.parseToken(token).get("roomName").toString();
             String name = JWT.parseToken(token).get("name").toString();
             CyberChip cyberChipRoom = redisGetCyberChip(roomName);
+            if (cyberChipRoom.isGaming()) {
+                cyberChipRoom.setGaming(false);
+                cyberChipRoom.setChipCount(0);
+                cyberChipRoom.setPot(0);
+                cyberChipRoom.setSidePotList(null);
+                for (int i=0;i<cyberChipRoom.getMemberList().size();i++) {
+                    cyberChipRoom.getMemberList().get(i).setBankRoll(0);
+                    cyberChipRoom.getMemberList().get(i).setThisRoundAnte(0);
+                    cyberChipRoom.getMemberList().get(i).setAllAnte(0);
+                }
+            }
             if (cyberChipRoom.getMemberList().size() == 1) {
                 stringRedisTemplate.boundHashOps("CyberChipRoomList").delete(roomName);
             } else {
