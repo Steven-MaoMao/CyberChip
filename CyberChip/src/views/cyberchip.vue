@@ -96,7 +96,7 @@
             </div>
             <v-card class="rounded-xl d-flex flex-column justify-space-between"
                 style="width: 100%; height: 55%; padding: 16px;">
-                <div class="flex-grow-1 d-flex justify-space-between">
+                <div class="d-flex justify-space-between" style="height: 65%;">
                     <div class="d-flex flex-column justify-space-between" style="width: 30%;">
                         <div class="d-flex justify-space-between align-center" style="height: 30%;">
                             <v-chip class="d-flex justify-center align-center" variant="outlined" label
@@ -188,13 +188,15 @@
                         </v-btn>
                     </div>
                 </div>
-                <v-divider class="border-opacity-25" style="margin-top: 2%; margin-bottom: 2%;"></v-divider>
-                <div class="d-flex justify-space-between">
-                    <v-btn variant="outlined" @click="toZero" style="width: 30%;">
+                <div class="d-flex align-center" style="height: 20%;">
+                    <v-divider class="border-opacity-25"></v-divider>
+                </div>
+                <div class="d-flex justify-space-between" style="height: 15%;">
+                    <v-btn variant="outlined" @click="toZero" style="width: 30%; height: 100%;">
                         归零
                     </v-btn>
                     <v-btn prepend-icon="mdi-stop" variant="outlined" color="error" @click="stopDialogVisible = true"
-                        style="width: 30%;" :disabled="this.name !== this.cyberChip.roomManager">
+                        style="width: 30%; height: 100%;" :disabled="this.name !== this.cyberChip.roomManager">
                         结束游戏
                     </v-btn>
                 </div>
